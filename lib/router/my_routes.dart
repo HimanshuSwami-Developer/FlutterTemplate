@@ -1,18 +1,12 @@
 class MyRoutes {
+
+  /// AUTH
   static const String splashScreen = "/";
-  
   static const String loginScreen = "/login";
 
-  static const String registerScreen = "/register";
-
-  static const String settingScreen = "/settings";
-
-
-  static const String attendanceScreen = "/attendance";
-
-  static const String paymentScreen = "/payment";
-
-  static const String contractorScreen = "/contractor";
-
-  static const String employeeScreen = "/employees";
+  /// MAIN APP
+  static const String homeScreen = "/home";
+  static const String scanScreen = "/scan";
+  static const String cardsScreen = "/cards";
+  static const String settingsScreen = "/settings";
 }
