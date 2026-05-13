@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "131776815567",
+    "project_id": "tapvault-2c4fe",
+    "storage_bucket": "tapvault-2c4fe.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:131776815567:android:4a9a47b35386ad2adc72ba",
+        "android_client_info": {
+          "package_name": "com.example.pubdev_widgets"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOTA0mmucU08Hg4F9QgbzsCAAfqW0lhBU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
