@@ -101,12 +101,12 @@ class MainLayout extends StatelessWidget {
 
             const Spacer(),
 
-            InkWell(
-              onTap: () {
-                context.push(MyRoutes.settingScreen);
-              },
-              child: Icon(Icons.settings),
-            ),
+            // InkWell(
+            //   onTap: () {
+            //     context.push(MyRoutes.settingScreen);
+            //   },
+            //   child: Icon(Icons.settings),
+            // ),
           ],
         ),
       ),
@@ -133,53 +133,53 @@ class MainLayout extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
 
         children: [
-          _navItem(
-            context,
+          // _navItem(
+          //   context,
 
-            icon: Icons.calendar_today,
+          //   icon: Icons.calendar_today,
 
-            label: "Attendance",
+          //   label: "Attendance",
 
-            route: MyRoutes.attendanceScreen,
+          //   route: MyRoutes.attendanceScreen,
 
-            active: location == MyRoutes.attendanceScreen,
-          ),
+          //   active: location == MyRoutes.attendanceScreen,
+          // ),
 
-          _navItem(
-            context,
+          // _navItem(
+          //   context,
 
-            icon: Icons.people,
+          //   icon: Icons.people,
 
-            label: "Employees",
+          //   label: "Employees",
 
-            route: MyRoutes.employeeScreen,
+          //   route: MyRoutes.employeeScreen,
 
-            active: location == MyRoutes.employeeScreen,
-          ),
+          //   active: location == MyRoutes.employeeScreen,
+          // ),
 
-          _navItem(
-            context,
+          // _navItem(
+          //   context,
 
-            icon: Icons.payments,
+          //   icon: Icons.payments,
 
-            label: "Payments",
+          //   label: "Payments",
 
-            route: MyRoutes.paymentScreen,
+          //   route: MyRoutes.paymentScreen,
 
-            active: location == MyRoutes.paymentScreen,
-          ),
+          //   active: location == MyRoutes.paymentScreen,
+          // ),
 
-          _navItem(
-            context,
+          // _navItem(
+          //   context,
 
-            icon: Icons.work,
+          //   icon: Icons.work,
 
-            label: "Contractors",
+          //   label: "Contractors",
 
-            route: MyRoutes.contractorScreen,
+          //   route: MyRoutes.contractorScreen,
 
-            active: location == MyRoutes.contractorScreen,
-          ),
+          //   active: location == MyRoutes.contractorScreen,
+          // ),
         ],
       ),
     );
@@ -226,53 +226,54 @@ class MainLayout extends StatelessWidget {
           const SizedBox(height: 10),
 
           /// MENU
-          _sideItem(
-            context,
+          // _sideItem(
+          //   context,
 
-            icon: Icons.calendar_today,
+          //   icon: Icons.calendar_today,
 
-            label: "Attendance",
+          //   label: "Attendance",
 
-            route: MyRoutes.attendanceScreen,
+          //   route: MyRoutes.attendanceScreen,
 
-            active: location == MyRoutes.attendanceScreen,
-          ),
+          //   active: location == MyRoutes.attendanceScreen,
+          // ),
 
-          _sideItem(
-            context,
+          // _sideItem(
+          //   context,
 
-            icon: Icons.people,
+          //   icon: Icons.people,
 
-            label: "Employees",
+          //   label: "Employees",
 
-            route: MyRoutes.employeeScreen,
+          //   route: MyRoutes.employeeScreen,
 
-            active: location == MyRoutes.employeeScreen,
-          ),
+          //   active: location == MyRoutes.employeeScreen,
+          // ),
 
-          _sideItem(
-            context,
+          // _sideItem(
+          //   context,
 
-            icon: Icons.payments,
+          //   icon: Icons.payments,
 
-            label: "Payments",
+          //   label: "Payments",
 
-            route: MyRoutes.paymentScreen,
+          //   route: MyRoutes.paymentScreen,
 
-            active: location == MyRoutes.paymentScreen,
-          ),
+          //   active: location == MyRoutes.paymentScreen,
+          // ),
 
-          _sideItem(
-            context,
+          //  _sideItem(
+          //   context,
 
-            icon: Icons.work,
+          //   icon: Icons.work,
 
-            label: "Contractors",
+          //   label: "Contractors",
 
-            route: MyRoutes.contractorScreen,
+          //   route: MyRoutes.contractorScreen,
 
-            active: location == MyRoutes.contractorScreen,
-          ),
+          //   active: location == MyRoutes.contractorScreen,
+          // ),
+        
         ],
       ),
     );
