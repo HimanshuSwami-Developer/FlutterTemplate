@@ -1,27 +1,80 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'app_colors.dart';
+
 class AppTextStyles {
-  static TextStyle headline = GoogleFonts.poppins(
-    fontSize: 16,
-    fontWeight: FontWeight.bold,
-    color: Colors.white,
+  /// ============================
+  /// HEADLINE
+  /// ============================
+
+  static TextStyle headline = GoogleFonts.inter(
+    fontSize: 28,
+    fontWeight: FontWeight.w700,
+    color: AppColors.textPrimary,
+
+    letterSpacing: -0.5,
   );
 
-  static TextStyle body = GoogleFonts.poppins(
+  /// ============================
+  /// TITLE
+  /// ============================
+
+  static TextStyle title = GoogleFonts.inter(
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textPrimary,
+  );
+
+  /// ============================
+  /// BODY
+  /// ============================
+
+  static TextStyle body = GoogleFonts.inter(
     fontSize: 14,
-    fontWeight: FontWeight.normal,
-    color: Colors.white70,
+    fontWeight: FontWeight.w400,
+    color: AppColors.textSecondary,
+
+    height: 1.5,
   );
 
-  static TextStyle label = GoogleFonts.poppins(
-    fontSize: 12,
+  /// ============================
+  /// LABEL
+  /// ============================
+
+  static TextStyle label = GoogleFonts.inter(
+    fontSize: 13,
     fontWeight: FontWeight.w500,
-    color: Colors.white,
+    color: AppColors.textPrimary,
   );
 
-  static TextStyle small = GoogleFonts.poppins(
+  /// ============================
+  /// SMALL TEXT
+  /// ============================
+
+  static TextStyle small = GoogleFonts.inter(
     fontSize: 12,
-    color: Colors.grey,
+    fontWeight: FontWeight.w400,
+    color: AppColors.inactive,
+  );
+
+  /// ============================
+  /// BUTTON TEXT
+  /// ============================
+
+  static TextStyle button = GoogleFonts.inter(
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textLight,
+  );
+
+  /// ============================
+  /// CAPTION
+  /// ============================
+
+  static TextStyle caption = GoogleFonts.inter(
+    fontSize: 11,
+    fontWeight: FontWeight.w500,
+    color: AppColors.textSecondary,
   );
 }

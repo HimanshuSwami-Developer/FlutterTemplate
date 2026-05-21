@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pubdev_widgets/core/app_text.dart';
 
 import '../../core/app_colors.dart';
-import '../../core/app_text.dart';
 
 class CustomTextField extends StatefulWidget {
-
   final String label;
   final String hint;
 
@@ -15,12 +14,13 @@ class CustomTextField extends StatefulWidget {
 
   final TextEditingController? controller;
 
-  /// NEW CUSTOMIZATION
   final Color? backgroundColor;
   final Color? textColor;
   final Color? hintColor;
   final Color? borderColor;
   final Color? labelColor;
+
+  final TextInputType? keyboardType;
 
   const CustomTextField({
     super.key,
@@ -32,12 +32,13 @@ class CustomTextField extends StatefulWidget {
     this.isTextArea = false,
     this.controller,
 
-    /// OPTIONAL COLORS
     this.backgroundColor,
     this.textColor,
     this.hintColor,
     this.borderColor,
     this.labelColor,
+
+    this.keyboardType,
   });
 
   @override
@@ -49,154 +50,211 @@ class _CustomTextFieldState
     extends State<CustomTextField> {
 
   bool isVisible = false;
+  bool isFocused = false;
 
   @override
   Widget build(BuildContext context) {
 
     final background =
         widget.backgroundColor ??
-            Colors.black.withOpacity(0.35);
+            Colors.white.withOpacity(0.55);
 
     final text =
-        widget.textColor ?? Colors.white;
+        widget.textColor ??
+            AppColors.textPrimary;
 
     final hint =
-        widget.hintColor ?? Colors.white24;
+        widget.hintColor ??
+            AppColors.inactive;
 
     final border =
         widget.borderColor ??
-            Colors.white.withOpacity(0.05);
+            const Color(0xFFD6D6DE);
 
     final label =
-        widget.labelColor ?? Colors.white70;
+        widget.labelColor ??
+            AppColors.textSecondary;
 
     return Column(
       crossAxisAlignment:
           CrossAxisAlignment.start,
 
-      mainAxisSize: MainAxisSize.min,
-
       children: [
 
         /// LABEL
         if (widget.label.isNotEmpty) ...[
-          Text(
-            widget.label,
+          Padding(
+            padding:
+                const EdgeInsets.only(left: 2),
+            child: Text(
+              widget.label,
 
-            style:
-                AppTextStyles.label.copyWith(
-              color: label,
-              fontSize: 11,
-              letterSpacing: 1.2,
+              style:
+                  AppTextStyles.caption.copyWith(
+                color: label,
+                fontSize: 10,
+                letterSpacing: 1.8,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
 
-          const SizedBox(height: 6),
+          const SizedBox(height: 10),
         ],
 
         /// FIELD
-        SizedBox(
-          height:
-              widget.isTextArea ? null : 52,
+        AnimatedContainer(
+          duration:
+              const Duration(milliseconds: 220),
 
-          child: TextField(
-            controller: widget.controller,
+          decoration: BoxDecoration(
+            borderRadius:
+                BorderRadius.circular(18),
 
-            obscureText:
-                widget.isPassword && !isVisible,
+            boxShadow: [
+              if (isFocused)
+                BoxShadow(
+                  blurRadius: 18,
+                  spreadRadius: 0,
+                  offset: const Offset(0, 6),
+                  color:
+                      Colors.black.withOpacity(0.06),
+                ),
+            ],
+          ),
 
-            textAlignVertical:
-                TextAlignVertical.center,
+          child: Focus(
+            onFocusChange: (value) {
+              setState(() {
+                isFocused = value;
+              });
+            },
 
-            maxLines:
-                widget.isTextArea ? 4 : 1,
+            child: TextField(
+              controller: widget.controller,
 
-            style:
-                AppTextStyles.body.copyWith(
-              color: text,
-            ),
+              keyboardType:
+                  widget.keyboardType,
 
-            decoration: InputDecoration(
+              obscureText:
+                  widget.isPassword &&
+                      !isVisible,
 
-              hintText: widget.hint,
+              maxLines:
+                  widget.isTextArea ? 4 : 1,
 
-              filled: true,
-
-              fillColor: background,
-
-              contentPadding:
-                  const EdgeInsets.symmetric(
-                vertical: 14,
-                horizontal: 14,
-              ),
-
-              /// HINT
-              hintStyle:
+              style:
                   AppTextStyles.body.copyWith(
-                color: hint,
+                color: text,
+                fontSize: 14,
               ),
 
-              /// PREFIX ICON
-              prefixIcon: widget.icon != null
-                  ? Padding(
-                      padding:
-                          const EdgeInsets.all(12),
+              cursorColor: AppColors.black,
 
-                      child: Icon(
-                        widget.icon,
-                        size: 18,
-                        color: hint,
-                      ),
-                    )
-                  : null,
+              decoration: InputDecoration(
 
-              /// PASSWORD TOGGLE
-              suffixIcon: widget.isPassword
-                  ? IconButton(
-                      icon: Icon(
-                        isVisible
-                            ? Icons.visibility
-                            : Icons.visibility_off,
+                hintText: widget.hint,
 
-                        color: hint,
-                      ),
-
-                      onPressed: () {
-                        setState(() {
-                          isVisible = !isVisible;
-                        });
-                      },
-                    )
-                  : null,
-
-              /// BORDER
-              border: OutlineInputBorder(
-                borderRadius:
-                    BorderRadius.circular(16),
-
-                borderSide: BorderSide(
-                  color: border,
+                hintStyle:
+                    AppTextStyles.body.copyWith(
+                  color: hint,
+                  fontSize: 14,
                 ),
-              ),
 
-              enabledBorder:
-                  OutlineInputBorder(
-                borderRadius:
-                    BorderRadius.circular(16),
+                filled: true,
 
-                borderSide: BorderSide(
-                  color: border,
+                fillColor: background,
+
+                contentPadding:
+                    EdgeInsets.symmetric(
+                  horizontal: 18,
+                  vertical:
+                      widget.isTextArea
+                          ? 18
+                          : 16,
                 ),
-              ),
 
-              focusedBorder:
-                  OutlineInputBorder(
-                borderRadius:
-                    BorderRadius.circular(16),
+                /// ICON
+                prefixIcon:
+                    widget.icon != null
+                        ? Padding(
+                            padding:
+                                const EdgeInsets.only(
+                              left: 14,
+                              right: 8,
+                            ),
 
-                borderSide: BorderSide(
-                  color: AppColors.primary,
-                  width: 1.4,
+                            child: Icon(
+                              widget.icon,
+                              size: 18,
+                              color: isFocused
+                                  ? AppColors.black
+                                  : hint,
+                            ),
+                          )
+                        : null,
+
+                prefixIconConstraints:
+                    const BoxConstraints(
+                  minWidth: 42,
+                ),
+
+                /// PASSWORD
+                suffixIcon:
+                    widget.isPassword
+                        ? IconButton(
+                            splashRadius: 18,
+
+                            icon: Icon(
+                              isVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+
+                              size: 20,
+
+                              color: hint,
+                            ),
+
+                            onPressed: () {
+                              setState(() {
+                                isVisible =
+                                    !isVisible;
+                              });
+                            },
+                          )
+                        : null,
+
+                /// BORDER
+                border: OutlineInputBorder(
+                  borderRadius:
+                      BorderRadius.circular(18),
+
+                  borderSide: BorderSide(
+                    color: border,
+                    width: 1,
+                  ),
+                ),
+
+                enabledBorder:
+                    OutlineInputBorder(
+                  borderRadius:
+                      BorderRadius.circular(18),
+
+                  borderSide: BorderSide(
+                    color: border,
+                    width: 1,
+                  ),
+                ),
+
+                focusedBorder:
+                    OutlineInputBorder(
+                  borderRadius:
+                      BorderRadius.circular(18),
+
+                  borderSide: BorderSide(
+                    color: AppColors.black,
+                    width: 1.3,
+                  ),
                 ),
               ),
             ),

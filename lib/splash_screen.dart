@@ -1,8 +1,10 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../core/app_colors.dart';
-import '../../router/my_routes.dart';
+import 'package:pubdev_widgets/core/app_colors.dart';
+import 'package:pubdev_widgets/core/app_text.dart';
+import 'package:pubdev_widgets/router/my_routes.dart';
 
 
 class SplashScreen extends StatefulWidget {
@@ -12,226 +14,403 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>
+    with TickerProviderStateMixin {
+  /// =========================================
+  /// LOADING TEXTS
+  /// =========================================
+
+  final List<String> loadingTexts = [
+    "Initializing secure workspace...",
+    "Loading academic modules...",
+    "Connecting institution database...",
+    "Preparing attendance system...",
+    "Syncing dashboard resources...",
+    "System ready. Entering workspace...",
+  ];
+
+  int currentIndex = 0;
+
+  Timer? timer;
+
+  /// =========================================
+  /// ANIMATIONS
+  /// =========================================
+
+  late AnimationController fadeController;
+
+  late Animation<double> fadeAnimation;
+
+  late AnimationController scaleController;
+
+  late Animation<double> scaleAnimation;
+
+  late AnimationController progressController;
 
   @override
   void initState() {
     super.initState();
 
-    /// ⏱ 2 sec delay → GoRouter navigation
-    Timer(const Duration(seconds: 2), () {
-      context.go(MyRoutes.loginScreen);
-    });
+    /// FADE
+
+    fadeController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    );
+
+    fadeAnimation = CurvedAnimation(
+      parent: fadeController,
+      curve: Curves.easeInOut,
+    );
+
+    /// SCALE
+
+    scaleController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    );
+
+    scaleAnimation = Tween<double>(
+      begin: .85,
+      end: 1,
+    ).animate(
+      CurvedAnimation(
+        parent: scaleController,
+        curve: Curves.easeOutBack,
+      ),
+    );
+
+    /// PROGRESS
+
+    progressController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 6),
+    );
+
+    fadeController.forward();
+
+    scaleController.forward();
+
+    progressController.forward();
+
+    /// TEXT CHANGER
+
+    timer = Timer.periodic(
+      const Duration(milliseconds: 900),
+      (timer) {
+        if (currentIndex < loadingTexts.length - 1) {
+          setState(() {
+            currentIndex++;
+          });
+        } else {
+          timer.cancel();
+
+          /// NAVIGATE HERE
+          ///
+         context.go(MyRoutes.institutionSetupScreen);
+        }
+      },
+    );
   }
 
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    backgroundColor: AppColors.background,
-    body: Container(
-      width: double.infinity,
-      height: double.infinity,
+  @override
+  void dispose() {
+    fadeController.dispose();
 
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Color(0xFF070B14),
-            Color(0xFF0F172A),
-            Color(0xFF070B14),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
+    scaleController.dispose();
 
-      child: Stack(
+    progressController.dispose();
+
+    timer?.cancel();
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.secondary,
+
+      body: Stack(
         children: [
+          /// =========================================
+          /// DOT BACKGROUND
+          /// =========================================
 
-          /// TOP GLOW
-          Positioned(
-            top: -120,
-            left: -80,
-            child: Container(
-              width: 250,
-              height: 250,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.primary.withOpacity(0.18),
-              ),
+          Positioned.fill(
+            child: CustomPaint(
+              painter: DotPainter(),
             ),
           ),
 
-          /// BOTTOM PURPLE GLOW
-          Positioned(
-            bottom: -100,
-            right: -60,
-            child: Container(
-              width: 220,
-              height: 220,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.secondary.withOpacity(0.15),
-              ),
-            ),
-          ),
-
+          /// =========================================
           /// MAIN CONTENT
-          Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
+          /// =========================================
 
-                /// LOGO CONTAINER
-                Container(
-                  padding: const EdgeInsets.all(22),
+          Center(
+            child: FadeTransition(
+              opacity: fadeAnimation,
+
+              child: ScaleTransition(
+                scale: scaleAnimation,
+
+                child: Container(
+                  width: 330,
+
+                  padding: const EdgeInsets.all(28),
+
                   decoration: BoxDecoration(
+                    color: AppColors.card,
+
                     borderRadius: BorderRadius.circular(30),
-                    color: AppColors.glass,
+
                     border: Border.all(
-                      color: Colors.white.withOpacity(0.08),
+                      color: AppColors.border,
                     ),
+
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.primary.withOpacity(0.25),
-                        blurRadius: 40,
-                        spreadRadius: 2,
-                      )
+                        color: Colors.black.withOpacity(.04),
+
+                        blurRadius: 30,
+
+                        offset: const Offset(0, 12),
+                      ),
                     ],
                   ),
 
-                  child: Container(
-                    padding: const EdgeInsets.all(24),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(24),
-                      gradient: const LinearGradient(
-                        colors: [
-                          AppColors.primary,
-                          AppColors.secondary,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+
+                    children: [
+                      /// ===================================
+                      /// LOGO
+                      /// ===================================
+
+                      Container(
+                        height: 64,
+                        width: 64,
+
+                        decoration: BoxDecoration(
+                          color: AppColors.primary,
+
+                          borderRadius:
+                              BorderRadius.circular(18),
+
+                          boxShadow: [
+                            BoxShadow(
+                              color:
+                                  Colors.black.withOpacity(.12),
+
+                              blurRadius: 20,
+
+                              offset: const Offset(0, 10),
+                            ),
+                          ],
+                        ),
+
+                        child: const Icon(
+                          Icons.school_outlined,
+                          color: AppColors.white,
+                          size: 28,
+                        ),
+                      ),
+
+                      const SizedBox(height: 32),
+
+                      /// ===================================
+                      /// TITLE
+                      /// ===================================
+
+                      Text(
+                        "Eclipse Engine",
+                        textAlign: TextAlign.center,
+
+                        style:
+                            AppTextStyles.headline.copyWith(
+                          fontSize: 35,
+                          height: 1,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      /// ===================================
+                      /// SUBTITLE
+                      /// ===================================
+
+                      Text(
+                        "PRECISION\nEXCELLENCE",
+                        textAlign: TextAlign.center,
+
+                        style: AppTextStyles.label.copyWith(
+                          color: AppColors.neutral,
+
+                          letterSpacing: 2,
+
+                          height: 1.1,
+
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+
+                      const SizedBox(height: 42),
+
+                      /// ===================================
+                      /// POWERED BY
+                      /// ===================================
+
+                      Row(
+                        mainAxisAlignment:
+                            MainAxisAlignment.center,
+
+                        children: [
+                          Text(
+                            "POWERED BY",
+                            style:
+                                AppTextStyles.caption.copyWith(
+                              letterSpacing: 1.5,
+
+                              fontWeight: FontWeight.w700,
+
+                              color: AppColors.inactive,
+                            ),
+                          ),
+
+                          const SizedBox(width: 8),
+
+                          const Icon(
+                            Icons.blur_on,
+                            size: 15,
+                            color: AppColors.black,
+                          ),
+
+                          const SizedBox(width: 4),
+
+                          Text(
+                            "De Silent Order",
+                            style:
+                                AppTextStyles.label.copyWith(
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
                         ],
                       ),
-                    ),
 
-                    child: const Icon(
-                      Icons.nfc,
-                      size: 46,
-                      color: Colors.white,
-                    ),
+                      const SizedBox(height: 26),
+
+                      /// ===================================
+                      /// STATUS TEXT
+                      /// ===================================
+
+                      AnimatedSwitcher(
+                        duration:
+                            const Duration(milliseconds: 400),
+
+                        transitionBuilder:
+                            (child, animation) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: SlideTransition(
+                              position: Tween<Offset>(
+                                begin:
+                                    const Offset(0, 0.3),
+                                end: Offset.zero,
+                              ).animate(animation),
+
+                              child: child,
+                            ),
+                          );
+                        },
+
+                        child: Text(
+                          loadingTexts[currentIndex],
+
+                          key: ValueKey(currentIndex),
+
+                          textAlign: TextAlign.center,
+
+                          style:
+                              AppTextStyles.small.copyWith(
+                            fontWeight: FontWeight.w600,
+
+                            color:
+                                AppColors.textSecondary,
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 22),
+
+                      /// ===================================
+                      /// PROGRESS BAR
+                      /// ===================================
+
+                      ClipRRect(
+                        borderRadius:
+                            BorderRadius.circular(100),
+
+                        child: SizedBox(
+                          height: 3,
+
+                          child: AnimatedBuilder(
+                            animation: progressController,
+
+                            builder: (context, child) {
+                              return LinearProgressIndicator(
+                                value:
+                                    progressController.value,
+
+                                backgroundColor:
+                                    Colors.black12,
+
+                                valueColor:
+                                    const AlwaysStoppedAnimation(
+                                  AppColors.black,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-
-                const SizedBox(height: 35),
-
-                /// APP NAME
-                const Text(
-                  "TapVault",
-                  style: TextStyle(
-                    fontSize: 38,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                    letterSpacing: 1.2,
-                  ),
-                ),
-
-                const SizedBox(height: 10),
-
-                /// TAGLINE
-                Text(
-                  "Tap • Pay • Secure",
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.white.withOpacity(0.65),
-                    letterSpacing: 2,
-                  ),
-                ),
-
-                const SizedBox(height: 45),
-
-                /// LOADER
-                SizedBox(
-                  width: 28,
-                  height: 28,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2.2,
-                    valueColor: const AlwaysStoppedAnimation(
-                      AppColors.primary,
-                    ),
-                    backgroundColor: Colors.white12,
-                  ),
-                ),
-
-                const SizedBox(height: 18),
-
-                Text(
-                  "INITIALIZING SECURE NFC CHANNEL",
-                  style: TextStyle(
-                    color: Colors.white.withOpacity(0.45),
-                    fontSize: 11,
-                    letterSpacing: 2,
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          /// FOOTER
-          Positioned(
-            bottom: 28,
-            left: 0,
-            right: 0,
-            child: Column(
-              children: [
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-
-                    _footerIcon(Icons.fingerprint),
-
-                    const SizedBox(width: 14),
-
-                    _footerIcon(Icons.security),
-
-                    const SizedBox(width: 14),
-
-                    _footerIcon(Icons.lock),
-                  ],
-                ),
-
-                const SizedBox(height: 14),
-
-                Text(
-                  "Powered by Secure NFC + QR Technology",
-                  style: TextStyle(
-                    color: Colors.white.withOpacity(0.35),
-                    fontSize: 11,
-                    letterSpacing: 1,
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ],
       ),
-    ),
-  );
-}
- 
- Widget _footerIcon(IconData icon) {
-  return Container(
-    padding: const EdgeInsets.all(12),
-    decoration: BoxDecoration(
-      color: Colors.white.withOpacity(0.05),
-      borderRadius: BorderRadius.circular(16),
-      border: Border.all(
-        color: Colors.white.withOpacity(0.06),
-      ),
-    ),
-    child: Icon(
-      icon,
-      size: 18,
-      color: AppColors.primary,
-    ),
-  );
+    );
+  }
 }
 
- }
+/// =============================================
+/// DOT BACKGROUND
+/// =============================================
+
+class DotPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.black.withOpacity(.035);
+
+    const spacing = 18.0;
+
+    for (double x = 0; x < size.width; x += spacing) {
+      for (double y = 0; y < size.height; y += spacing) {
+        canvas.drawCircle(
+          Offset(x, y),
+          1,
+          paint,
+        );
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
+  }
+}

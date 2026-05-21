@@ -1,6 +1,5 @@
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
-import 'package:pubdev_widgets/firebase_options.dart';
 import '../router/app_router.dart';
 import 'constant/session_manager.dart';
 import 'core/app_colors.dart';
@@ -8,9 +7,6 @@ import 'core/app_colors.dart';
 void main() async {
    WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
 
    await SessionManager.init();
   runApp(const MyApp());
