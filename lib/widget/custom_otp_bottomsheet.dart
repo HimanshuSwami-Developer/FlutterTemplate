@@ -13,7 +13,7 @@ class CustomOtpBottomSheet extends StatefulWidget {
   final String subtitle;
 
   final String buttonText;
-
+  final TextEditingController? otpController;
   final int otpLength;
 
   final VoidCallback? onVerify;
@@ -21,7 +21,7 @@ class CustomOtpBottomSheet extends StatefulWidget {
 
   const CustomOtpBottomSheet({
     super.key,
-
+    this.otpController,
     required this.title,
     required this.subtitle,
 
@@ -263,7 +263,7 @@ class _CustomOtpBottomSheetState
                       /// =========================
                       Pinput(
                         length: widget.otpLength,
-
+                        controller: widget.otpController,
                         keyboardType:
                             TextInputType.number,
 

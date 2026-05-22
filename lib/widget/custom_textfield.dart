@@ -4,6 +4,7 @@ import 'package:pubdev_widgets/core/app_text.dart';
 import '../../core/app_colors.dart';
 
 class CustomTextField extends StatefulWidget {
+
   final String label;
   final String hint;
 
@@ -11,6 +12,8 @@ class CustomTextField extends StatefulWidget {
 
   final bool isPassword;
   final bool isTextArea;
+
+  final bool readOnly;
 
   final TextEditingController? controller;
 
@@ -24,12 +27,17 @@ class CustomTextField extends StatefulWidget {
 
   const CustomTextField({
     super.key,
+
     required this.label,
     required this.hint,
 
     this.icon,
+
     this.isPassword = false,
     this.isTextArea = false,
+
+    this.readOnly = false,
+
     this.controller,
 
     this.backgroundColor,
@@ -50,6 +58,7 @@ class _CustomTextFieldState
     extends State<CustomTextField> {
 
   bool isVisible = false;
+
   bool isFocused = false;
 
   @override
@@ -81,19 +90,25 @@ class _CustomTextFieldState
 
       children: [
 
+        /// =========================
         /// LABEL
+        /// =========================
         if (widget.label.isNotEmpty) ...[
           Padding(
             padding:
                 const EdgeInsets.only(left: 2),
+
             child: Text(
               widget.label,
 
               style:
                   AppTextStyles.caption.copyWith(
                 color: label,
+
                 fontSize: 10,
+
                 letterSpacing: 1.8,
+
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -102,7 +117,9 @@ class _CustomTextFieldState
           const SizedBox(height: 10),
         ],
 
+        /// =========================
         /// FIELD
+        /// =========================
         AnimatedContainer(
           duration:
               const Duration(milliseconds: 220),
@@ -112,19 +129,27 @@ class _CustomTextFieldState
                 BorderRadius.circular(18),
 
             boxShadow: [
-              if (isFocused)
+
+              /// FOCUS SHADOW
+              if (isFocused &&
+                  !widget.readOnly)
                 BoxShadow(
                   blurRadius: 18,
+
                   spreadRadius: 0,
-                  offset: const Offset(0, 6),
-                  color:
-                      Colors.black.withOpacity(0.06),
+
+                  offset: const Offset(
+                      0, 6),
+
+                  color: Colors.black
+                      .withOpacity(0.06),
                 ),
             ],
           ),
 
           child: Focus(
             onFocusChange: (value) {
+
               setState(() {
                 isFocused = value;
               });
@@ -136,6 +161,8 @@ class _CustomTextFieldState
               keyboardType:
                   widget.keyboardType,
 
+              readOnly: widget.readOnly,
+
               obscureText:
                   widget.isPassword &&
                       !isVisible,
@@ -145,14 +172,26 @@ class _CustomTextFieldState
 
               style:
                   AppTextStyles.body.copyWith(
-                color: text,
+
+                color:
+                    widget.readOnly
+                        ? Colors.black54
+                        : text,
+
                 fontSize: 14,
+
+                fontWeight:
+                    widget.readOnly
+                        ? FontWeight.w500
+                        : FontWeight.w400,
               ),
 
-              cursorColor: AppColors.black,
+              cursorColor:
+                  AppColors.black,
 
               decoration: InputDecoration(
 
+                /// HINT
                 hintText: widget.hint,
 
                 hintStyle:
@@ -161,20 +200,27 @@ class _CustomTextFieldState
                   fontSize: 14,
                 ),
 
+                /// BG
                 filled: true,
 
-                fillColor: background,
+                fillColor:
+                    widget.readOnly
+                        ? const Color(
+                            0xFFF2F2F5)
+                        : background,
 
+                /// PADDING
                 contentPadding:
                     EdgeInsets.symmetric(
                   horizontal: 18,
+
                   vertical:
                       widget.isTextArea
                           ? 18
                           : 16,
                 ),
 
-                /// ICON
+                /// PREFIX ICON
                 prefixIcon:
                     widget.icon != null
                         ? Padding(
@@ -186,10 +232,17 @@ class _CustomTextFieldState
 
                             child: Icon(
                               widget.icon,
+
                               size: 18,
-                              color: isFocused
-                                  ? AppColors.black
-                                  : hint,
+
+                              color:
+                                  widget.readOnly
+                                      ? Colors
+                                          .black38
+                                      : isFocused
+                                          ? AppColors
+                                              .black
+                                          : hint,
                             ),
                           )
                         : null,
@@ -207,8 +260,10 @@ class _CustomTextFieldState
 
                             icon: Icon(
                               isVisible
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
+                                  ? Icons
+                                      .visibility
+                                  : Icons
+                                      .visibility_off,
 
                               size: 20,
 
@@ -216,6 +271,7 @@ class _CustomTextFieldState
                             ),
 
                             onPressed: () {
+
                               setState(() {
                                 isVisible =
                                     !isVisible;
@@ -227,7 +283,8 @@ class _CustomTextFieldState
                 /// BORDER
                 border: OutlineInputBorder(
                   borderRadius:
-                      BorderRadius.circular(18),
+                      BorderRadius.circular(
+                          18),
 
                   borderSide: BorderSide(
                     color: border,
@@ -238,10 +295,16 @@ class _CustomTextFieldState
                 enabledBorder:
                     OutlineInputBorder(
                   borderRadius:
-                      BorderRadius.circular(18),
+                      BorderRadius.circular(
+                          18),
 
                   borderSide: BorderSide(
-                    color: border,
+                    color:
+                        widget.readOnly
+                            ? const Color(
+                                0xFFE4E4EA)
+                            : border,
+
                     width: 1,
                   ),
                 ),
@@ -249,10 +312,16 @@ class _CustomTextFieldState
                 focusedBorder:
                     OutlineInputBorder(
                   borderRadius:
-                      BorderRadius.circular(18),
+                      BorderRadius.circular(
+                          18),
 
                   borderSide: BorderSide(
-                    color: AppColors.black,
+                    color:
+                        widget.readOnly
+                            ? const Color(
+                                0xFFE4E4EA)
+                            : AppColors.black,
+
                     width: 1.3,
                   ),
                 ),
